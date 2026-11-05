@@ -1,47 +1,44 @@
-class Fighter:
-    def __init__(self, name, hp, attack, defense):
-        # 引数で受け取った値を、インスタンスの属性に入れる
-        self.name = name
-        self.hp = hp
-        self.attack = attack
-        self.defense = defense
-
-    def super_saiyan(self):
-        # 今の攻撃力を2倍にして、属性に入れ直す
-        self.attack = self.attack * 2
-
-    def punch(self, opponent):
-        # self が攻撃する側、opponent が攻撃される側
-        damage = self.attack - opponent.defense
-        opponent.hp -= damage
-        # HP がマイナスにならないよう、0 にそろえる
-        if opponent.hp < 0:
-            opponent.hp = 0
-        print(f"{self.name}の攻撃! {opponent.name}に{damage}のダメージ! ({opponent.name}のHP: {opponent.hp})")
+"""問題：おこづかい帳
+①残高を持つ Wallet クラスを作成する（最初の残高は 1000円）
+②ターミナルで「1: 入金」「2: 支払い」「3: 終了」を選べるようにする
+③入金・支払いの金額は入力で決め、残高より多い支払いは「残高が足りません」と出力する
+④「3」が入力されるまでくり返し、終了するときに最後の残高を出力する
+"""
 
 
-gokuu = Fighter("悟空", 1000, 100, 50)
-vegita = Fighter("ベジータ", 1000, 80, 100)
+class Wallet:
+    def __init__(self, balance):
+        self.balance = balance
 
-# 戦う前に、悟空をスーパーサイヤ人に変身させる
-gokuu.super_saiyan()
-print(f"{gokuu.name}はスーパーサイヤ人に変身した! 攻撃力: {gokuu.attack}")
+    def deposit(self, amount):
+        self.balance += amount
+        print(f"{amount}円を入金しました。残高: {self.balance}円")
 
-turn = 1
-# 何ターンで終わるか分からないので、break するまでずっとくり返す
+    def pay(self, amount):
+        if amount > self.balance:
+            print("もっと働こう")
+        else:
+            self.balance -= amount
+            print(f"{amount}円を支払いました。残高: {self.balance}円")
+
+
+def show_menu():
+    print("1: 入金 / 2: 支払い / 3: 終了")
+
+
+wallet = Wallet(1000)
+
 while True:
-    print(f"--- ターン{turn} ---")
-
-    # 悟空の攻撃。ベジータの HP が 0 になったら、ターンの途中でも終わる
-    gokuu.punch(vegita)
-    if vegita.hp == 0:
-        print(f"{vegita.name}は倒れた! {gokuu.name}の勝利!")
+    show_menu()
+    choice = input("番号を入力：")
+    if choice == "1":
+        amount = int(input("入金する金額："))
+        wallet.deposit(amount)
+    elif choice == "2":
+        amount = int(input("支払う金額："))
+        wallet.pay(amount)
+    elif choice == "3":
+        print(f"終了します。最後の残高: {wallet.balance}円")
         break
-
-    # ベジータの攻撃。悟空の HP が 0 になったら終わる
-    vegita.punch(gokuu)
-    if gokuu.hp == 0:
-        print(f"{gokuu.name}は倒れた! {vegita.name}の勝利!")
-        break
-
-    turn += 1
+    else:
+        print("1〜3の番号を入力してください")
