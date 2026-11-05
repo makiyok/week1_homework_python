@@ -1,5 +1,3 @@
-
-
 primes = []
 
 for num in range(2, 41):
